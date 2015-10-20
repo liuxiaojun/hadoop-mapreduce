@@ -9,5 +9,5 @@ wordCount/
 # run
 hadoop jar WordCount-1.0-SNAPSHOT.jar /user/liuxj/input /user/liuxj/wordcount/output
 
-# example
+# result
 http://hadoop.apache.org/docs/r1.0.4/cn/mapred_tutorial.html
