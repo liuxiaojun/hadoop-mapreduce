@@ -1,8 +1,12 @@
 import java.io.IOException;
+import java.util.Iterator;
+
+import org.apache.commons.math.util.OpenIntToDoubleHashMap;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Counter;  //counter
+import org.apache.hadoop.mapreduce.CounterGroup;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
@@ -42,6 +46,22 @@ public class MyCounter {
         job.setMapperClass(MyCounterMap.class);
         FileInputFormat.addInputPath(job, new Path(args[0]));
         FileOutputFormat.setOutputPath(job, new Path(args[1]));
-        System.exit(job.waitForCompletion(true) ? 0 : 1);
+
+        job.waitForCompletion(true);
+
+        CounterGroup counterGroup = job.getCounters().getGroup("ErrorCounter");
+        Iterator<Counter> counters = counterGroup.iterator();
+
+        System.out.println("===============");
+        while (counters.hasNext()){
+            Counter counter = counters.next();
+            System.out.println(counter.getName());
+
+            System.out.println(job.getCounters().findCounter("ErrorCounter",counter.getName()).getValue());
+
+        }
+
+
+        //System.exit( ? 0 : 1);
     }
 }
